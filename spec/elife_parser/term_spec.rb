@@ -28,10 +28,53 @@ RSpec.describe ElifeParser::Term do
         ElifeParser.tree("rato OR roma")
       }
 
-      it_behaves_like "a matching term", " O rato roeu "
-      it_behaves_like "a matching term", " a roupa de roma "
-      it_behaves_like "a matching term", " rei de roma "
-      it_behaves_like "a not matching term", " roeu a roupa "
+      it_behaves_like "a matching term", "O rato roeu"
+      it_behaves_like "a matching term", "a roupa de roma"
+      it_behaves_like "a matching term", "rei de roma"
+      it_behaves_like "a not matching term", "roeu a roupa"
+    end
+
+    context "rat* OR roma" do
+      subject {
+        ElifeParser.tree("rat* OR roma")
+      }
+
+      it_behaves_like "a matching term", "A rata roeu"
+      it_behaves_like "a matching term", "O rato roeu"
+      it_behaves_like "a matching term", "a roupa de roma"
+      it_behaves_like "a matching term", "rei de roma"
+      it_behaves_like "a not matching term", "roeu a roupa"
+    end
+
+    context "futebol de (homem OR mulher)" do
+      subject {
+        ElifeParser.tree("futebol de (homem OR mulher)")
+      }
+
+      it_behaves_like "a matching term", "Futebol de Homem"
+      it_behaves_like "a matching term", "Futebol de Mulher"
+      it_behaves_like "a not matching term", "Futebol de Cegos"
+    end
+
+    context "gosto de *can*" do
+      subject {
+        ElifeParser.tree("gosto de *can*")
+      }
+
+      it_behaves_like "a matching term", "Gosto de cano"
+      it_behaves_like "a matching term", "Gosto de encanamento"
+      it_behaves_like "a not matching term", "Gosto de bolo"
+    end
+
+    context "(gosto de *can*) -\"non creio\"" do
+      subject {
+        ElifeParser.tree("(gosto de *can*) -\"non creio\"")
+      }
+
+      it_behaves_like "a matching term", "Gosto de cano"
+      it_behaves_like "a matching term", "Gosto de encanamento"
+      it_behaves_like "a not matching term", "Gosto de encanamento, non creio"
+      it_behaves_like "a not matching term", "Gosto de bolo"
     end
   end
 end

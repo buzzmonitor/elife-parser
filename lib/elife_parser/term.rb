@@ -66,10 +66,28 @@ module ElifeParser
     def evaluate text
       matchEval = false
 
-      if @value && (@value.include?("@") || @value.include?("#"))
-        matchEval = text.content.include? (" " + @value + " ")
-      elsif @value
-        matchEval = text.content_without_ats_and_fences.include? (" " + @value + " ")
+      if @value.start_with?("url:")
+        matchEval = text.original_text.include?(" " + @value[4..-1] + " ");
+      else
+        end_with_star = @value.end_with?("*")
+        start_with_star = @value.start_with?("*")
+
+        if end_with_star && start_with_star
+          # remove first and last star from term
+          temp_value = @value[1..-2]
+        elsif start_with_star
+          temp_value = @value[1..-1] + " "
+        elsif end_with_star
+          temp_value = " " + @value[0..-2]
+        else
+          temp_value = " #{@value} "
+        end
+
+        if @value.include?("@") || @value.include?("#")
+          matchEval = text.modified_text.include? temp_value
+        else
+          matchEval = text.modified_text_without_special_caracters.include? temp_value
+        end
       end
 
       if @negative

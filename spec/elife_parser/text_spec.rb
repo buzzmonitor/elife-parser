@@ -9,9 +9,9 @@ RSpec.describe ElifeParser::Text do
     end
   end
 
-  describe "content_without_ats_and_fences" do
+  describe "modified_text_without_special_caracters" do
     it "should remove @ and #" do
-      expect(subject.content_without_ats_and_fences).to eql("manoel quirino")
+      expect(subject.modified_text_without_special_caracters).to eql(" manoel quirino ")
     end
   end
 end

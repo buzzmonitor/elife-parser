@@ -1,3 +1,5 @@
+require "gemoji-parser"
+
 require "elife_parser/version"
 require "elife_parser/methods"
 require "elife_parser/text"
