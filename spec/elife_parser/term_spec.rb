@@ -88,5 +88,14 @@ RSpec.describe ElifeParser::Term do
       it_behaves_like "a matching term", "🙊"
       it_behaves_like "a not matching term", "🙊 🙉"
     end
+
+    context "👨🏿" do
+      subject {
+        ElifeParser.tree("👨🏿")
+      }
+
+      it_behaves_like "a matching term", "👨🏿"
+      it_behaves_like "a matching term", "👨"
+    end
   end
 end

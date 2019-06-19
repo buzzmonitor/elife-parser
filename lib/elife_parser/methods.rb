@@ -6,7 +6,11 @@ module ElifeParser
         return nil
       end
 
-      tree_processed_term pre_processing(EmojiParser.tokenize(term))
+      skin_tone_re = /((?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff}?))/
+
+      tree_processed_term pre_processing(
+        EmojiParser.tokenize(term).gsub(skin_tone_re, "")
+      )
     end
 
     def tree_processed_term term
