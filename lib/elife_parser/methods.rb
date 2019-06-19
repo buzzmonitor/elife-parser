@@ -6,7 +6,7 @@ module ElifeParser
         return nil
       end
 
-      tree_processed_term pre_processing(term)
+      tree_processed_term pre_processing(EmojiParser.tokenize(term))
     end
 
     def tree_processed_term term

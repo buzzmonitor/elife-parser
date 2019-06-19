@@ -76,5 +76,17 @@ RSpec.describe ElifeParser::Term do
       it_behaves_like "a not matching term", "Gosto de encanamento, non creio"
       it_behaves_like "a not matching term", "Gosto de bolo"
     end
+
+    context "(Test OR 🙈 OR 🙊) -🙉" do
+      subject {
+        ElifeParser.tree("(Test OR 🙈 OR 🙊) -🙉")
+      }
+
+      it_behaves_like "a matching term", "Test Gosto de cano"
+      it_behaves_like "a not matching term", "Gosto de encanamento"
+      it_behaves_like "a matching term", "🙈"
+      it_behaves_like "a matching term", "🙊"
+      it_behaves_like "a not matching term", "🙊 🙉"
+    end
   end
 end
