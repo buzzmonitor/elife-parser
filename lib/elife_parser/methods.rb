@@ -6,14 +6,18 @@ module ElifeParser
         return nil
       end
 
-      term = pre_processing term
+      tree_processed_term pre_processing(term)
+    end
+
+    def tree_processed_term term
       brackets = 0
       root = nil
 
       term = term.each_char.map do |c|
-        if c == '('
+        case c
+        when OPEN_BRACKET
           brackets += 1
-        elsif c == ')'
+        when CLOSE_BRACKET
           brackets -= 1
         end
 
@@ -42,27 +46,31 @@ module ElifeParser
       terms.each do |t|
         node = Term.new
         if (t.include? '£') || (t.include? '§')
-          t = t[t.index('(')+1,t.rindex(')')-1] #try
+          t = t[t.index('(') + 1, t.rindex(')') - 1] #try
           t = t.gsub(/§/,"\+")
           t = t.gsub(/£/,"\|")
-          node = tree t
+          node = tree_processed_term t
         else
-          node.negative = (t.start_with? '-') ? true : false
-          t = t.gsub(/\"/,"")
-          t = t.gsub(/[+-]/,"")
-          t = t.gsub(/\(/,"")
-          t = t.gsub(/\)/,"")
+          node.negative = t.start_with? '-'
+          t = t.gsub(/[\"\+\-\(\)]/,"")
           node.value = t
         end
         root.terms.push node
       end
+
       root
     end
 
     def root_expression term
       brackets = 0
       term = term.each_char do |c|
-        brackets += c=='(' ? 1 : (c==')' ? -1 : 0)
+        case c
+        when OPEN_BRACKET
+          brackets += 1
+        when CLOSE_BRACKET
+          brackets -= 1
+        end
+
         if (c=='+'||c=='-')&&brackets==0 then
           return ElifeParser::Expression::AND
         elsif (c=='|')&&brackets==0 then
@@ -86,10 +94,14 @@ module ElifeParser
       term = term.tr_s(" ","\+")
       term = term.gsub(/\+\+/,"\, ")
 
-      open = false
+      is_open = false
+
       term = term.each_char.map do |c|
-        if c == '"' then open = !open end
-        c = c=='+'&&open ? ' ' : c
+        if c == '"'
+          is_open = !is_open
+        end
+
+        c = c == '+' && is_open ? ' ' : c
       end.join
     end
 
