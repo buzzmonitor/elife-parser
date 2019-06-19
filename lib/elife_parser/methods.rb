@@ -20,7 +20,7 @@ module ElifeParser
         if c == '+' && brackets == 0 && !root
           root = Term.new
           root.expression = ElifeParser::Expression::AND
-        elsif c=='|' && brackets==0 && !root
+        elsif c == '|' && brackets == 0 && !root
           root = Term.new
           root.expression = ElifeParser::Expression::OR
         elsif c == '+' && brackets > 0
