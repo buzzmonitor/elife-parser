@@ -94,8 +94,26 @@ RSpec.describe ElifeParser::Term do
         ElifeParser.tree("👨🏿")
       }
 
-      it_behaves_like "a matching term", "👨🏿"
-      it_behaves_like "a matching term", "👨"
+      it_behaves_like "a matching term", "👨🏿 🤦🏻‍♂"
+      it_behaves_like "a matching term", "👨 🤦🏻‍♂"
+    end
+
+    context '"gshow" OR #gshow OR #bomsucesso OR ("bom sucesso" (festa OR globo OR novela OR evento)) OR "caio blat" OR #caioblat' do
+      subject {
+        ElifeParser.tree('"gshow" OR #gshow OR #bomsucesso OR ("bom sucesso" (festa OR globo OR novela OR evento)) OR "caio blat" OR #caioblat')
+      }
+
+      it_behaves_like "a matching term", "bom sucesso festa"
+      it_behaves_like "a matching term", "bom sucesso globo"
+      it_behaves_like "a not matching term", "bom globo"
+      it_behaves_like "a not matching term", "bom bomsucesso globo"
+      it_behaves_like "a matching term", "bom #bomsucesso globo"
+      it_behaves_like "a matching term", "bom globo gshow"
+      it_behaves_like "a matching term", "globo #gshow"
+      it_behaves_like "a matching term", "caio blat"
+      it_behaves_like "a not matching term", "caio"
+      it_behaves_like "a not matching term", "caioblat"
+      it_behaves_like "a matching term", "#caioblat"
     end
   end
 end
