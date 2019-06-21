@@ -53,5 +53,25 @@ RSpec.describe ElifeParser::Methods do
         "((abrir|abertura|abrindo+conta)|cadastro|cadastrar|renda|documentos|comprovante|comprovantes)"
       )
     }
+
+    it {
+      expect(
+        Dummy.pre_processing(
+          "(foo bar)(test ando)"
+        )
+      ).to eql(
+        "(foo+bar)+(test+ando)"
+      )
+    }
+
+    it {
+      expect(
+        Dummy.pre_processing(
+          "“foo bar“"
+        )
+      ).to eql(
+        "\"foo bar\""
+      )
+    }
   end
 end

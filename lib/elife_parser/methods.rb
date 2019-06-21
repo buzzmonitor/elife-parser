@@ -105,6 +105,9 @@ module ElifeParser
 
       term = term.gsub(/\( /,"(")
       term = term.gsub(/ \)/,")")
+      term = term.gsub('“', '"')
+      term = term.gsub('”', '"')
+      term = term.gsub(")(", ") (")
       term = term.tr_s("\,","\+")
       term = term.tr_s(" ","\+")
       term = term.gsub(/\+\+/,"\, ")
