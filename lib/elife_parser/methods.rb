@@ -50,7 +50,9 @@ module ElifeParser
 
       root.terms = Array.new
       terms.each do |t|
-        if t.include?('¥')
+        if t.size <= 2
+          next
+        elsif t.include?('¥')
           t = t.gsub("¥", "+")
           node = tree_processed_term t
         elsif (t.include? '£') || (t.include? '§')

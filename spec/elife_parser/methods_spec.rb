@@ -13,6 +13,16 @@ RSpec.describe ElifeParser::Methods do
         "((test OR (testando AND testado)) AND NOT testei AND NOT \"nao pode se\")"
       )
     }
+
+    it "should skip term with 2 tokens or less" do
+      expect(
+        Dummy.tree(
+          "gosto de jogar bola"
+        ).to_s
+      ).to eql(
+        "(gosto AND jogar AND bola)"
+      )
+    end
   end
 
   context "#pre_processing" do
