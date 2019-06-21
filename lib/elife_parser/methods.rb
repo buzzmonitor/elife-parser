@@ -16,6 +16,7 @@ module ElifeParser
     def tree_processed_term term
       brackets = 0
       root = nil
+      open_quotes = false
 
       term = term.each_char.map do |c|
         case c
@@ -23,28 +24,18 @@ module ElifeParser
           brackets += 1
         when CLOSE_BRACKET
           brackets -= 1
-        end
-
-        if c == '+' && brackets == 0 && !root
-          root = Term.new
-          root.expression = ElifeParser::Expression::AND
-        elsif c == '|' && brackets == 0 && !root
-          root = Term.new
-          root.expression = ElifeParser::Expression::OR
-        elsif c == '+' && brackets > 0
-          c = '§'
-        elsif c == '|' && brackets > 0
-          c = '£'
+        when QUOTE
+          open_quotes = !open_quotes
+        when '+'
+          c = '§' if brackets > 0
+          c = ' ' if open_quotes
+        when '|'
+          c = '£' if brackets > 0
         end
         c
       end.join
 
-      term = verify_precedence(term)
-
-      if not root
-        root = Term.new
-        root.expression = ElifeParser::Expression::AND
-      end
+      root = get_root term
 
       terms = term.split(/\+|\|/)
 
@@ -64,6 +55,7 @@ module ElifeParser
           node = Term.new
           node.negative = t.start_with? '-'
           t = t.gsub(/[\"\+\-\(\)]/,"")
+          t = t.strip
           node.value = t
         end
         root.terms.push node
@@ -72,23 +64,15 @@ module ElifeParser
       root
     end
 
-    def root_expression term
-      brackets = 0
-      term = term.each_char do |c|
-        case c
-        when OPEN_BRACKET
-          brackets += 1
-        when CLOSE_BRACKET
-          brackets -= 1
-        end
-
-        if (c=='+'||c=='-')&&brackets==0 then
-          return ElifeParser::Expression::AND
-        elsif (c=='|')&&brackets==0 then
-          return ElifeParser::Expression::OR
-        end
+    def get_root term
+      root = Term.new
+      if term.include? "|"
+        term.gsub!("+","¥")
+        root.expression = ElifeParser::Expression::OR
+      else
+        root.expression = ElifeParser::Expression::AND
       end
-      ElifeParser::Expression::AND
+      root
     end
 
     def pre_processing term
@@ -118,20 +102,6 @@ module ElifeParser
       term = term.tr_s("\,","\+")
       term = term.tr_s(" ","\+")
       term = term.gsub(/\+\+/,"\, ")
-
-      is_open = false
-
-      term = term.each_char.map do |c|
-        if c == '"'
-          is_open = !is_open
-        end
-
-        c = c == '+' && is_open ? ' ' : c
-      end.join
-    end
-
-    def verify_precedence term
-      term.include?('|') ? term.gsub("+", "¥") : term
     end
 
   end

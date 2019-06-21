@@ -8,6 +8,7 @@ require "elife_parser/term"
 module ElifeParser
   OPEN_BRACKET = '('
   CLOSE_BRACKET = ')'
+  QUOTE = '"'
 
   module Expression
     AND = "AND"
