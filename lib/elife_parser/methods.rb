@@ -92,6 +92,17 @@ module ElifeParser
       term = term.tr_s(
       "àáâãäåāăąçćĉċčðďđèéêëēĕėęěĝğġģĥħìíîïĩīĭįıĵķĸĺļľŀłñńņňŉŋòóôõöøōŏőŕŗřśŝşšſţťŧùúûüũūŭůűųŵýÿŷźżž",
       "aaaaaaaaacccccdddeeeeeeeeegggghhiiiiiiiiijkklllllnnnnnnooooooooorrrssssstttuuuuuuuuuuwyyyzzz")
+      chars = term.split('')
+      open_bracket_count = chars.select {|c| c == '(' }.size
+      close_bracket_count = chars.select {|c| c == ')' }.size
+      diff = open_bracket_count - close_bracket_count
+
+      if diff < 0
+        term = "#{"(" * -diff}#{term}"
+      elsif diff > 0
+        term = "#{term}#{")" * diff}"
+      end
+
       term = term.gsub(/\( /,"(")
       term = term.gsub(/ \)/,")")
       term = term.tr_s("\,","\+")
