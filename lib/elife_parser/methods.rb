@@ -39,6 +39,8 @@ module ElifeParser
         c
       end.join
 
+      term = verify_precedence(term)
+
       if not root
         root = Term.new
         root.expression = ElifeParser::Expression::AND
@@ -48,13 +50,16 @@ module ElifeParser
 
       root.terms = Array.new
       terms.each do |t|
-        node = Term.new
-        if (t.include? '£') || (t.include? '§')
+        if t.include?('¥')
+          t = t.gsub("¥", "+")
+          node = tree_processed_term t
+        elsif (t.include? '£') || (t.include? '§')
           t = t[t.index('(') + 1, t.rindex(')') - 1] #try
           t = t.gsub(/§/,"\+")
           t = t.gsub(/£/,"\|")
           node = tree_processed_term t
         else
+          node = Term.new
           node.negative = t.start_with? '-'
           t = t.gsub(/[\"\+\-\(\)]/,"")
           node.value = t
@@ -121,6 +126,10 @@ module ElifeParser
 
         c = c == '+' && is_open ? ' ' : c
       end.join
+    end
+
+    def verify_precedence term
+      term.include?('|') ? term.gsub("+", "¥") : term
     end
 
   end
