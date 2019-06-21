@@ -13,8 +13,6 @@ module ElifeParser
           "aaaaaaaaacccccdddeeeeeeeeegggghhiiiiiiiiijkklllllnnnnnnooooooooorrrssssstttuuuuuuuuuuwyyyzzz"
         ).gsub(/\s+/, " ") + " "
       end
-
-      @sanitized_text
     end
 
 
@@ -23,8 +21,6 @@ module ElifeParser
         # remove white spaces
         sanitized_text.gsub(/\s\s+/, "\s")
       end
-
-      @original_text
     end
 
     def modified_text
@@ -38,17 +34,12 @@ module ElifeParser
         # remove white spaces
         final_text.gsub(/\s\s+/, "\s")
       end
-
-      @modified_text
     end
 
     def modified_text_without_special_caracters
       @modified_text_without_special_caracters ||= begin
         modified_text.gsub(/@|#/, "")
       end
-
-      @modified_text_without_special_caracters
     end
-
   end
 end
