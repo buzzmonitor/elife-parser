@@ -7,6 +7,16 @@ RSpec.describe ElifeParser::Methods do
     it {
       expect(
         Dummy.tree(
+          "one OR two OR three OR four five six"
+        ).to_s
+      ).to eql(
+        "(one OR two OR three OR (four AND five AND six))"
+      )
+    }
+
+    it {
+      expect(
+        Dummy.tree(
           "(test OR testando testado) -testei -\"nao pode se\""
         ).to_s
       ).to eql(
