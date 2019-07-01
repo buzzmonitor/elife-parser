@@ -19,12 +19,6 @@ RSpec.describe ElifeParser::Term do
         "(manoel OR (quirino neto \"k n\") OR silva OR (foo bar baz))  -teste -\"+foo  bar\""
       )
     end
-
-    it "test" do
-      p ElifeParser.tree(
-        "\"mais+\""
-      ).match?(ElifeParser::Text.new('"mais+"'))
-    end
   end
 
 
@@ -35,6 +29,9 @@ RSpec.describe ElifeParser::Term do
       }
 
       it_behaves_like "a not matching term", "mais"
+      it_behaves_like "a not matching term", "quero mais 1"
+      it_behaves_like "a matching term", "mais+"
+      it_behaves_like "a matching term", "quero mais+ 1"
     end
     
     context "rato OR roma" do
@@ -45,6 +42,7 @@ RSpec.describe ElifeParser::Term do
       it_behaves_like "a matching term", "O rato roeu"
       it_behaves_like "a matching term", "a roupa de roma"
       it_behaves_like "a matching term", "rei de roma"
+      it_behaves_like "a matching term", "rato+eira"
       it_behaves_like "a not matching term", "roeu a roupa"
     end
 

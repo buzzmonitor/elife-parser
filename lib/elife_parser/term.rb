@@ -85,6 +85,8 @@ module ElifeParser
 
         if @value.include?("@") || @value.include?("#")
           matchEval = text.modified_text.include? temp_value
+        elsif @value.include?("+")
+          matchEval = text.modified_text_with_plus.include? temp_value
         else
           matchEval = text.modified_text_without_special_caracters.include? temp_value
         end
