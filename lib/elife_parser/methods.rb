@@ -63,6 +63,7 @@ module ElifeParser
           node = Term.new
           node.negative = t.start_with? '-'
           t = t.gsub(/[\"\+\-\(\)]/,"")
+          t = t.gsub("†", "+")
           t = t.strip
           node.value = t
         end
@@ -84,6 +85,7 @@ module ElifeParser
     end
 
     def pre_processing term
+      term = term.gsub("+", "†")
       term = term.gsub(/\s\s+/, "\s")
       term = term.strip
       term = term.gsub(/ OR /,"|")

@@ -19,10 +19,24 @@ RSpec.describe ElifeParser::Term do
         "(manoel OR (quirino neto \"k n\") OR silva OR (foo bar baz))  -teste -\"+foo  bar\""
       )
     end
+
+    it "test" do
+      p ElifeParser.tree(
+        "\"mais+\""
+      ).match?(ElifeParser::Text.new('"mais+"'))
+    end
   end
 
 
   describe "match" do
+    context '"mais+"' do
+      subject {
+        ElifeParser.tree('"mais+"')
+      }
+
+      it_behaves_like "a not matching term", "mais"
+    end
+    
     context "rato OR roma" do
       subject {
         ElifeParser.tree("rato OR roma")
