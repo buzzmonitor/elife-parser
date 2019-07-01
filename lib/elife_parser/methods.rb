@@ -8,9 +8,17 @@ module ElifeParser
 
       skin_tone_re = /((?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff}?))/
 
-      tree_processed_term pre_processing(
-        EmojiParser.tokenize(term).gsub(skin_tone_re, "")
-      )
+      # .gsub('- :', '-:') -> remover espaço de emoji negativado
+
+      tree_processed_term(pre_processing(
+        EmojiParser.parse_unicode(term) {|emoji|
+          # emoji tera espaço entre eles
+          " :#{emoji.name}: "
+        }
+          .gsub(skin_tone_re, "")
+          .gsub('- :', '-:')
+
+      ))
     end
 
     def tree_processed_term term
@@ -55,6 +63,7 @@ module ElifeParser
           node = Term.new
           node.negative = t.start_with? '-'
           t = t.gsub(/[\"\+\-\(\)]/,"")
+          t = t.gsub("†", "+")
           t = t.strip
           node.value = t
         end
@@ -76,6 +85,7 @@ module ElifeParser
     end
 
     def pre_processing term
+      term = term.gsub("+", "†")
       term = term.gsub(/\s\s+/, "\s")
       term = term.strip
       term = term.gsub(/ OR /,"|")
