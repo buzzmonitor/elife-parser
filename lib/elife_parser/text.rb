@@ -27,9 +27,9 @@ module ElifeParser
       @modified_text ||= begin
         skin_tone_re = /((?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff}?))/
         final_text = sanitized_text
-        final_text = final_text.gsub("[^\\.\\w\\s\\@\\#\\&\\p{InGreek}\\uD800-\\uDBFF\\uDC00-\\uDFFF\\/]", " ")
-        final_text = final_text.gsub("\\.[\\s+\\$]", " ")
-        final_text = final_text.gsub("\\-", " ")
+        final_text = final_text.gsub(/[^\.\w\s\@\#\&\u0370-\u03ff\u1f00-\u1fff\/\u{1f300}-\u{1f5ff}\u{1f600}-\u{1f64f}]/," ")
+        final_text = final_text.gsub(/\.[\s+\$]/, " ")
+        #final_text = final_text.gsub("\\-", " ")
         final_text = EmojiParser.tokenize(final_text).gsub(skin_tone_re, "")
         # remove white spaces
         final_text.gsub(/\s\s+/, "\s")
