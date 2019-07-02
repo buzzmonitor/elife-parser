@@ -23,6 +23,14 @@ RSpec.describe ElifeParser::Term do
 
 
   describe "match" do
+    context 'coca OR "Coca-Cola" OR Fanta OR Sprite OR "verde campo" OR yas OR ades OR charrua OR "agua Crystal" OR "del valle" OR "guarana jesus" OR "guarana tai" OR guarapan OR "matte leao" OR powerade OR schwepps OR "guarana simba" OR tuchaua' do
+      subject {
+        ElifeParser.tree('coca OR "Coca-Cola" OR Fanta OR Sprite OR "verde campo" OR yas OR ades OR charrua OR "agua Crystal" OR "del valle" OR "guarana jesus" OR "guarana tai" OR guarapan OR "matte leao" OR powerade OR schwepps OR "guarana simba" OR tuchaua')
+      }
+
+      it_behaves_like "a not matching term", "Es vergoinha de politicos só venha nos nas suas fazer o nessesario já mais só promessa safadeza deste politicos s.r comprando safadoes"
+    end
+    
     context '"mais+"' do
       subject {
         ElifeParser.tree('"mais+"')
@@ -32,6 +40,14 @@ RSpec.describe ElifeParser::Term do
       it_behaves_like "a not matching term", "quero mais 1"
       it_behaves_like "a matching term", "mais+"
       it_behaves_like "a matching term", "quero mais+ 1"
+    end
+
+    context "foo OR (jn (materia OR bar))" do
+      subject {
+        ElifeParser.tree("foo OR (jn (materia OR bar))")
+      }
+
+      it_behaves_like "a not matching term", "Aberta a temporada de férias da meninada: entra em cartaz, no dia 10, a 'Fábrica de Sonhos - Mostra de Animação', no Centro Cultural Banco do Brasil, na Praça da Liberdade. Veja programação completa na matéria!"
     end
     
     context "rato OR roma" do

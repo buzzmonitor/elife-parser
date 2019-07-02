@@ -49,7 +49,7 @@ module ElifeParser
 
       root.terms = Array.new
       terms.each do |t|
-        if t.size <= 2
+        if t.size <= 1
           next
         elsif t.include?('¥')
           t = t.gsub("¥", "+")

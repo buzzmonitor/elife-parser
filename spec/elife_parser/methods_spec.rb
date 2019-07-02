@@ -13,6 +13,16 @@ RSpec.describe ElifeParser::Methods do
         "(one OR two OR three OR (four AND five AND six))"
       )
     }
+    
+    it {
+      expect(
+        Dummy.tree(
+          "foo OR (jn (materia OR bar))"
+        ).to_s
+      ).to eql(
+        "(foo OR (jn AND (materia OR bar)))"
+      )
+    }
 
     it {
       expect(
@@ -84,10 +94,10 @@ RSpec.describe ElifeParser::Methods do
       )
     }
 
-    it "should skip term with 2 tokens or less" do
+    it "should skip term with 1 token" do
       expect(
         Dummy.tree(
-          "gosto de jogar bola"
+          "gosto e jogar bola"
         ).to_s
       ).to eql(
         "(gosto AND jogar AND bola)"
