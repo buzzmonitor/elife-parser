@@ -17,6 +17,16 @@ RSpec.describe ElifeParser::Methods do
     it {
       expect(
         Dummy.tree(
+          '(Coca OR coquinha OR "coca-cola" OR "coca cola") (cigarro OR fumar OR fuma OR envelhecimento OR nicotina OR envelhece OR envelhecer OR estudo OR pesquisa)'
+        ).to_s
+      ).to eql(
+        "((coca OR coquinha OR cocacola OR \"coca cola\") AND (cigarro OR fumar OR fuma OR envelhecimento OR nicotina OR envelhece OR envelhecer OR estudo OR pesquisa))"
+      )
+    }
+    
+    it {
+      expect(
+        Dummy.tree(
           "foo OR (jn (materia OR bar))"
         ).to_s
       ).to eql(

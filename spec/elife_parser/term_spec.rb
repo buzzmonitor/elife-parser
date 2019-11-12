@@ -30,6 +30,22 @@ RSpec.describe ElifeParser::Term do
 
       it_behaves_like "a not matching term", "Es vergoinha de politicos só venha nos nas suas fazer o nessesario já mais só promessa safadeza deste politicos s.r comprando safadoes"
     end
+
+    context '#jornalnacional OR "jornal nacional" OR #jn OR "no jn" OR "o jn" OR "ao jn" OR "do jn" OR "pro jn" OR "pelo jn" OR (bonner (majú OR jornal OR renata OR bancada OR globo OR apresentador))' do
+      subject {
+        ElifeParser.tree('#jornalnacional OR "jornal nacional" OR #jn OR "no jn" OR "o jn" OR "ao jn" OR "do jn" OR "pro jn" OR "pelo jn" OR (bonner (majú OR jornal OR renata OR bancada OR globo OR apresentador))')
+      }
+
+      it_behaves_like "a not matching term", 'Em audiência na Câmara, o jornalista disse que o ministro da Justiça está usando "tática cínica" - https://uol.page.link/fjeCs Glenn defende mensagens vazadas: "Moro tenta enganar o público" NOTICIAS.UOL.COM.BR'
+    end
+    
+    context '(Coca OR coquinha OR "coca-cola" OR "coca cola") (cigarro OR fumar OR fuma OR envelhecimento OR nicotina OR envelhece OR envelhecer OR estudo OR pesquisa)' do
+      subject {
+        ElifeParser.tree('(Coca OR coquinha OR "coca-cola" OR "coca cola") (cigarro OR fumar OR fuma OR envelhecimento OR nicotina OR envelhece OR envelhecer OR estudo OR pesquisa)')
+      }
+
+      it_behaves_like "a not matching term", "Pessoas que bebem refrigerantes açucarados duas ou mais vezes por dia têm um risco 21% maior de morrer prematuramente  #ÉpocaNEGÓCIOS Grupo de Harvard analisou as dietas de mais de 100 mil pessoas por 34 anos e constatou que o consumo constante das bebidas açucaradas leva a mais mortes por doenças cardíacas e dois tipos de câncer"
+    end
     
     context '"mais+"' do
       subject {
@@ -92,6 +108,15 @@ RSpec.describe ElifeParser::Term do
       it_behaves_like "a matching term", "Gosto de cano"
       it_behaves_like "a matching term", "Gosto de encanamento"
       it_behaves_like "a not matching term", "Gosto de bolo"
+    end
+
+    context "url:(http://globo.com) AND gosto" do
+      subject {
+        ElifeParser.tree("url:(http://globo.com)")
+      }
+
+      it_behaves_like "a matching term", "http://globo.com"
+      it_behaves_like "a not matching term", "globo"
     end
 
     context "(gosto de *can*) -\"non creio\"" do
