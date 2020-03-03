@@ -15,6 +15,10 @@ module ElifeParser
       end
     end
 
+    def parse_unicode_emojis text
+      # parse old black_hevy_heart to the new one 
+      text.gsub("❤", "❤️")
+    end
 
     def original_text
       @original_text ||= begin
@@ -32,8 +36,13 @@ module ElifeParser
     def modified_text_with_plus
       @modified_text_with_plus ||= begin
         skin_tone_re = /((?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff}?))/
+        #remove caracteres especiais
         final_text = sanitized_text
-        final_text = final_text.gsub(/[^\.\+\w\s\@\#\&\u0370-\u03ff\u1f00-\u1fff\/\u{1f300}-\u{1f5ff}\u{1f600}-\u{1f64f}]/," ")
+        #faz o parsing de um coração para outro
+        final_text = parse_unicode_emojis final_text
+        #remove caracteres
+        final_text = final_text.gsub(/[^\.\+\w\s\@\#\&\u0370-\u03ff\u1f00-\u1fff\/\u{1f300}-\u{1f5ff}\u{1f600}-\u{1f64f}]]/," ")
+        
         final_text = EmojiParser.parse_unicode(final_text) { |emoji| " :#{emoji.name}: " }.gsub(skin_tone_re, "")
         final_text = final_text.gsub(/\.[\s+\$]/, " ")
         

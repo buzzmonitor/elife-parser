@@ -17,8 +17,8 @@ RSpec.describe ElifeParser::Text do
 
   describe "modified_text" do
     it "should remove special caracters and change emojis" do
-      expect(described_class.new("@livia.vilaca ##opa/&eba 🔥 🐷🐽.$ :?  .$ - -a º ρε👽😀☂❤华み원❤")
-        .modified_text).to eql(" @livia.vilaca ##opa/&eba :fire: :pig: :pig_nose: a ρε :alien: :grinning: ")
+      expect(described_class.new("@livia.vilaca ##opa/&eba 🔥 🐷🐽.$ :?  .$ - -a º ρε👽😀☂ ❤ 华み원 ❤ ❤️ ❤ ❤️")
+        .modified_text).to eql(" @livia.vilaca ##opa/&eba  :fire:   :pig:  :pig_nose:   :?   - -a º ρε :alien:  :grinning: ☂  :heart:  华み원  :heart:   :heart: :heart:   :heart: ")
     end
   end
 
