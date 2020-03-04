@@ -161,6 +161,16 @@ RSpec.describe ElifeParser::Term do
       it_behaves_like "a not matching term", "🙈"
     end
 
+    context "❤" do
+      subject {
+        ElifeParser.tree("❤")
+      }
+
+      it_behaves_like "a matching term", "amo! ❤"
+      it_behaves_like "a matching term", "anw ❤️"
+      it_behaves_like "a not matching term", "🙈"
+    end
+
     context '"gshow" OR #gshow OR #bomsucesso OR ("bom sucesso" (festa OR globo OR novela OR evento)) OR "caio blat" OR #caioblat' do
       subject {
         ElifeParser.tree('"gshow" OR #gshow OR #bomsucesso OR ("bom sucesso" (festa OR globo OR novela OR evento)) OR "caio blat" OR #caioblat')

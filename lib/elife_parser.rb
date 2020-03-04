@@ -9,6 +9,7 @@ module ElifeParser
   OPEN_BRACKET = '('
   CLOSE_BRACKET = ')'
   QUOTE = '"'
+  EMOJI_GSUB_PROC = Proc.new { |text| text.gsub("❤", "❤️")}
 
   module Expression
     AND = "AND"

@@ -9,7 +9,7 @@ module ElifeParser
       skin_tone_re = /((?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff}?))/
 
       # .gsub('- :', '-:') -> remover espaço de emoji negativado
-
+      term = ElifeParser::EMOJI_GSUB_PROC.call(term)
       tree_processed_term(pre_processing(
         EmojiParser.parse_unicode(term) {|emoji|
           # emoji tera espaço entre eles
