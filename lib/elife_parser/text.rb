@@ -15,7 +15,6 @@ module ElifeParser
       end
     end
 
-
     def original_text
       @original_text ||= begin
         # remove white spaces
@@ -32,9 +31,20 @@ module ElifeParser
     def modified_text_with_plus
       @modified_text_with_plus ||= begin
         skin_tone_re = /((?:\u{1f3fb}|\u{1f3fc}|\u{1f3fd}|\u{1f3fe}|\u{1f3ff}?))/
+        #remove caracteres especiais
         final_text = sanitized_text
-        final_text = final_text.gsub(/[^\.\+\w\s\@\#\&\u0370-\u03ff\u1f00-\u1fff\/\u{1f300}-\u{1f5ff}\u{1f600}-\u{1f64f}]/," ")
+        #Descrição do regex:
+        # ^ é negação
+        #\.\+\s\@\#\& identifica os caracteres especiais: (. + @ # & ❤️), \w é para qualquer texto não especial
+        #depois disso é o regex de classificação de todos os emojis [\u...]
+        #Essa expressão regular descreve a linguagem que NÃO (^) possui os caracteres descritos acima. Transforma em " " cada ocorrência.
+        final_text = final_text.gsub(/[^\.\+\w\s\@\#\&\❤\u0370-\u03ff\u1f00-\u1fff\/\u{1f300}-\u{1f5ff}\u{1f600}-\u{1f64f}]/," ")
+        
+        #faz o parsing de um coração para outro, se não quiser fazer a conversão dos corações é só comentar
+        final_text = ElifeParser::EMOJI_GSUB_PROC.call(final_text)
+        
         final_text = EmojiParser.parse_unicode(final_text) { |emoji| " :#{emoji.name}: " }.gsub(skin_tone_re, "")
+        
         final_text = final_text.gsub(/\.[\s+\$]/, " ")
         
         # remove white spaces
