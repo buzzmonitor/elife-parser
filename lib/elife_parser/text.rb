@@ -45,7 +45,7 @@ module ElifeParser
         
         final_text = EmojiParser.parse_unicode(final_text) { |emoji| " :#{emoji.name}: " }.gsub(skin_tone_re, "")
         
-        final_text = final_text.gsub(/\.[\s+\$]/, " ")
+        final_text = final_text.gsub(/\.+[\s+\$]/, " ")
         
         # remove white spaces
         final_text.gsub(/\s\s+/, "\s")
