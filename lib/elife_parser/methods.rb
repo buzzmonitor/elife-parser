@@ -112,7 +112,6 @@ module ElifeParser
       term = term.tr_s("\,","\+")
       term = term.tr_s(" ","\+")
       term = term.gsub(/\+\+/,"\, ")
-      term = term.gsub(/§|£/," ")
     end
 
   end
